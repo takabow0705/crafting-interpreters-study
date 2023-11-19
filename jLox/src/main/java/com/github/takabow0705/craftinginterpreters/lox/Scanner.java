@@ -53,7 +53,7 @@ public class Scanner {
     }
 
     private boolean isAtEnd() {
-        return current > source.length();
+        return current >= source.length();
     }
 
     private void scanToken() {
@@ -114,6 +114,7 @@ public class Scanner {
             case ' ':
             case '\r':
             case '\t':
+                break;
             case '\n':
                 line++;
                 break;
@@ -185,6 +186,7 @@ public class Scanner {
             return;
         }
 
+        advance();
         // 左右の引用符を切り捨てる
         String value = source.substring(start + 1, current - 1);
         addToken(STRING, value);
