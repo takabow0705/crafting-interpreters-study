@@ -45,8 +45,8 @@ abstract class Expr {
     }
 
     static class Literal extends Expr {
-        Literal(Object object) {
-            this.object = object;
+        Literal(Object value) {
+            this.value = value;
         }
 
         @Override
@@ -54,7 +54,7 @@ abstract class Expr {
             return visitor.visitLiteralExpr(this);
         }
 
-        final Object object;
+        final Object value;
     }
 
     static class Unary extends Expr {
