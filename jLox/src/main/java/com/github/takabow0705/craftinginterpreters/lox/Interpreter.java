@@ -12,14 +12,19 @@ public class Interpreter implements Expr.Visitor<Object> {
             case EQUAL_EQUAL:
                 return !isEqual(left, right);
             case GREATER:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left > (double) right;
             case GREATER_EQUAL:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left >= (double) right;
             case LESS:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left < (double) right;
             case LESS_EQUAL:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left <= (double) right;
             case MINUS:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left - (double) right;
             case PLUS: // 加算と連接の両方のケースをカバーする
                 if (left instanceof Double && right instanceof Double) {
@@ -28,10 +33,12 @@ public class Interpreter implements Expr.Visitor<Object> {
                 if (left instanceof String && right instanceof String) {
                     return (String) left + (String) right;
                 }
-                break;
+                checkNumberOperands(expr.operator, left, right);
             case SLASH:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left / (double) right;
             case STAR:
+                checkNumberOperands(expr.operator, left, right);
                 return (double) left * (double) right;
         }
         // unreachable
@@ -54,12 +61,23 @@ public class Interpreter implements Expr.Visitor<Object> {
 
         switch (expr.operator.tokenType) {
             case MINUS:
+                checkNumberOperand(expr.operator, right);
                 return -(double) right;
             case BANG:
                 return !isTruthy(right);
         }
         // unreachable
         return null;
+    }
+
+    private void checkNumberOperand(Token operator, Object operand) {
+        if (operand instanceof Double) return;
+        throw new RuntimeError(operator, "Operand must be a number.");
+    }
+
+    private void checkNumberOperands(Token operator, Object left, Object right) {
+        if (left instanceof Double && right instanceof Double) return;
+        throw new RuntimeError(operator, "Operand must be numbers.");
     }
 
     private boolean isTruthy(Object o) {
