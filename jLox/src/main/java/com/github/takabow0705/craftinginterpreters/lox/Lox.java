@@ -49,11 +49,11 @@ public class Lox {
         List<Token> tokens = scanner.scanTokens();
 
         Parser parser = new Parser(tokens);
-        Expr expr = parser.parse();
+        List<Stmt> statements = parser.parse();
 
         // 構文エラーがあれば停止する
         if (hadError) return;
-        intepreter.interpret(expr);
+        intepreter.interpret(statements);
     }
 
     static void error(int line, String message) {
