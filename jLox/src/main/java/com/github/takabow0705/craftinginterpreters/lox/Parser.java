@@ -5,11 +5,22 @@ import java.util.List;
 import static com.github.takabow0705.craftinginterpreters.lox.TokenType.*;
 
 public class Parser {
+    private static class ParseError extends RuntimeException {
+    }
+
     private final List<Token> tokens;
     private int current = 0;
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+    Expr parse() {
+        try {
+            return expression();
+        } catch (ParseError error) {
+            return null;
+        }
     }
 
     private Expr expression() {
@@ -82,12 +93,38 @@ public class Parser {
             consume(RIGHT_PAREN, "Expect ')' after expression.");
             return new Expr.Grouping(expr);
         }
-        throw new IllegalArgumentException(); //一時的においておく
+        throw error(peek(), "Expect expression.");
     }
 
-    private void consume(TokenType rightParen, String s) {
+    private Token consume(TokenType type, String message) {
+        if (check(type)) return advance();
+        throw error(peek(), message);
     }
 
+    private ParseError error(Token token, String message) {
+        Lox.error(token, message);
+        return new ParseError();
+    }
+
+    private void synchronize() {
+        advance();
+        while (!isAtEnd()) {
+            if (previous().tokenType == SEMICOLON) return;
+
+            switch (peek().tokenType) {
+                case CLASS:
+                case FOR:
+                case FUN:
+                case IF:
+                case PRINT:
+                case RETURN:
+                case VAR:
+                case WHILE:
+                    return;
+            }
+            advance();
+        }
+    }
 
     private boolean match(TokenType... tokenTypes) {
         for (TokenType type : tokenTypes) {
