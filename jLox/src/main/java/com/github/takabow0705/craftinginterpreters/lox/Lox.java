@@ -49,7 +49,7 @@ public class Lox {
         Expr expr = parser.parse();
 
         // 構文エラーがあれば停止する
-        if(hadError) return;
+        if (hadError) return;
         System.out.println(new AstPrinter().print(expr));
     }
 
