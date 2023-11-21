@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Lox {
-    private static final Interpreter intepreter = new Interpreter();
+    private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;
     static boolean hadRuntimeError = false;
 
@@ -53,7 +53,12 @@ public class Lox {
 
         // 構文エラーがあれば停止する
         if (hadError) return;
-        intepreter.interpret(statements);
+        Resolver resolver = new Resolver(interpreter);
+        resolver.resolve(statements);
+
+        // 解決エラーがあれば停止
+        if (hadError) return;
+        interpreter.interpret(statements);
     }
 
     static void error(int line, String message) {
