@@ -99,6 +99,11 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     public Void visitClassStmt(Stmt.Class stmt) {
         declare(stmt.name);
         define(stmt.name);
+
+        for (Stmt.Function method : stmt.methods) {
+            FunctionType dellaration = FunctionType.METHOD;
+            resolveFunction(method, dellaration);
+        }
         return null;
     }
 
@@ -222,6 +227,6 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     private enum FunctionType {
         NONE,
-        FUNCTION
+        METHOD, FUNCTION
     }
 }

@@ -169,11 +169,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitSetExpr(Expr.Set expr) {
         Object object = evaluate(expr.object);
 
-        if(!(object instanceof LoxInstance)){
+        if (!(object instanceof LoxInstance)) {
             throw new RuntimeError(expr.name, "Only instance have fileds.");
         }
         Object value = evaluate(expr.value);
-        ((LoxInstance)object).set(expr.name, value);
+        ((LoxInstance) object).set(expr.name, value);
         return value;
     }
 
@@ -191,7 +191,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitClassStmt(Stmt.Class stmt) {
         environment.define(stmt.name.lexme, null);
-        LoxClass klass = new LoxClass(stmt.name.lexme);
+
+        Map<String, LoxFunction> methods = new HashMap<>();
+        for (Stmt.Function method : stmt.methods) {
+            LoxFunction function = new LoxFunction(method, environment);
+            methods.put(method.name.lexme, function);
+        }
+
+        LoxClass klass = new LoxClass(stmt.name.lexme, methods);
         environment.assign(stmt.name, klass);
         return null;
     }
