@@ -71,6 +71,13 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Void visitSetExpr(Expr.Set expr) {
+        resolve(expr.value);
+        resolve(expr.object);
+        return null;
+    }
+
+    @Override
     public Void visitVariableExpr(Expr.Variable expr) {
         if (!scopes.isEmpty() && scopes.peek().get(expr.name.lexme) == Boolean.FALSE) {
             Lox.error(expr.name, "Can't real local variable in its own initializer");

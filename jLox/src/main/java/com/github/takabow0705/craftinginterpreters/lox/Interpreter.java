@@ -166,6 +166,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Object visitSetExpr(Expr.Set expr) {
+        Object object = evaluate(expr.object);
+
+        if(!(object instanceof LoxInstance)){
+            throw new RuntimeError(expr.name, "Only instance have fileds.");
+        }
+        Object value = evaluate(expr.value);
+        ((LoxInstance)object).set(expr.name, value);
+        return value;
+    }
+
+    @Override
     public Object visitVariableExpr(Expr.Variable expr) {
         return lookUpVariable(expr.name, expr);
     }

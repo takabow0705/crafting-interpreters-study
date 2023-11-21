@@ -20,6 +20,8 @@ abstract class Expr {
 
         R visitLogicalExpr(Logical expr);
 
+        R visitSetExpr(Set expr);
+
         R visitVariableExpr(Variable expr);
 
     }
@@ -144,6 +146,23 @@ abstract class Expr {
         final Expr left;
         final Token operator;
         final Expr right;
+    }
+
+    static class Set extends Expr {
+        Set(Expr object, Token name, Expr value) {
+            this.object = object;
+            this.name = name;
+            this.value = value;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitSetExpr(this);
+        }
+
+        final Expr object;
+        final Token name;
+        final Expr value;
     }
 
     static class Variable extends Expr {
