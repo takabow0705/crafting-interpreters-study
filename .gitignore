@@ -27,3 +27,6 @@ replay_pid*
 .idea
 jLox/.gradle
 jLox/build
+
+# for C/C++
+cLox/main
