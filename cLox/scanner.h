@@ -12,7 +12,7 @@ typedef enum
     TOKEN_DOT,
     TOKEN_MINUS,
     TOKEN_PLUS,
-    TOKEM_SEMICOLIN,
+    TOKEN_SEMICOLON,
     TOKEN_SLASH,
     TOKEN_STAR,
 
@@ -45,7 +45,7 @@ typedef enum
     TOKEN_THIS,
     TOKEN_TRUE,
     TOKEN_VAR,
-    TONEN_WHILE,
+    TOKEN_WHILE,
 
     TOKEN_ERROR,
     TOKEN_EOF
