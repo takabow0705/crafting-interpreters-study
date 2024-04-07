@@ -48,7 +48,7 @@ static char *readFile(const char *path)
     size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
     if (bytesRead < fileSize)
     {
-        fprintf(stderr, "Coudl not read file \"%s\".\n", path);
+        fprintf(stderr, "Could not read file \"%s\".\n", path);
     }
 
     buffer[bytesRead] = '\0';
